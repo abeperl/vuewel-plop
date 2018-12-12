@@ -1,14 +1,7 @@
 <template>
   <div>
     <score-bar />
-    <crystal
-      :size="50"
-      :selected="true"
-    />
-    <crystal
-      :size="50"
-      color="purple"
-    />
+    <play-area />
   </div>
 </template>
 

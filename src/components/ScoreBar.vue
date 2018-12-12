@@ -33,18 +33,19 @@ export default {
 <style scoped>
 .header {
   font-family: 'Nova Mono', sans-serif;
-  font-size: 25px;
+  font-size: 18px;
   font-weight: bold;
   background: lightblue;
   border-bottom: 2px solid darkblue;
   margin-bottom: 5px;
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
 }
 
 .title {
   color:#666;
-  margin: 3px 10px;
+  margin: 3px 5px;
   padding: 2px;
 }
 
