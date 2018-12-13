@@ -2,6 +2,7 @@
   <div
     class="play-area"
     :style="{ width: `${columns * 50}px`, height: `${rows * 50}px` }"
+    ref="container"
   >
       <transition-group
         name="fade"
@@ -11,12 +12,15 @@
           :key="crystal.id"
           :width="50"
           :color="crystal.color"
+          :selected="crystal.selected"
           :style="{
             position: 'absolute',
             top: `${crystal.row * 50}px`,
             left: `${crystal.column * 50}px`
           }"
-          @touchend.native="crystalHit(crystal.id)"
+          @touchstart.native="touchStart"
+          @touchmove.native="touchMove"
+          @touchend.native="touchEnd"
           class="crystal"
         />
       </transition-group>
@@ -49,8 +53,22 @@ export default {
     },
   },
   methods: {
-    crystalHit(id) {
-      this.$store.commit('removeCrystal', id);
+    find(touch) {
+      return {
+        column: Math.ceil((touch.clientX - this.$refs.container.offsetLeft) / 50) - 1,
+        row: Math.ceil((touch.clientY - this.$refs.container.offsetTop) / 50) - 1,
+      };
+    },
+    touchStart(e) {
+      this.$store.commit('startTouch', this.find(e.touches[0]));
+    },
+    touchEnd() {
+      this.$store.commit('endTouch');
+    },
+    touchMove(e) {
+      for (const touch of e.touches) {
+        this.$store.commit('extendTouch', this.find(touch));
+      }
     },
   },
 };

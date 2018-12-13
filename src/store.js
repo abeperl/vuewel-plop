@@ -17,6 +17,7 @@ const store = new Vuex.Store({
       'yellow',
     ],
     nextId: 0,
+    selectedColor: null,
   },
   mutations: {
     setup(state) {
@@ -35,8 +36,55 @@ const store = new Vuex.Store({
       }
       state.crystals = crystals;
     },
-    removeCrystal(state, id) {
-      const crystalsAfterRemove = state.crystals.filter(c => c.id !== id);
+    startTouch(state, { row, column }) {
+      state.crystals.forEach(c => c.selected = false);
+      const crystal = state.crystals.find(c => c.column === column && c.row === row);
+      if (crystal) {
+        state.selectedColor = crystal.color;
+        crystal.selected = true;
+      }
+    },
+    extendTouch(state, { row, column }) {
+      const findCrystal = (r, c) => state.crystals.find(
+        crystal => crystal.column === c && crystal.row === r,
+      );
+
+      const isSelected = (r, c) => {
+        const checkCrystal = findCrystal(r, c);
+        return checkCrystal && checkCrystal.selected;
+      };
+
+      const crystal = findCrystal(row, column);
+
+      if (
+        crystal
+        && crystal.color === state.selectedColor
+        && (
+          isSelected(row - 1, column)
+          || isSelected(row + 1, column)
+          || isSelected(row, column - 1)
+          || isSelected(row, column + 1)
+          || isSelected(row - 1, column - 1)
+          || isSelected(row - 1, column + 1)
+          || isSelected(row + 1, column - 1)
+          || isSelected(row + 1, column + 1)
+        )
+      ) {
+        crystal.selected = true;
+      }
+    },
+    endTouch(state) {
+      // Tabulate scores
+      let scoreAdd = 0;
+      state.crystals
+        .filter(c => c.selected)
+        .forEach((c, i) => {
+          scoreAdd += i + 1;
+        });
+      state.score += scoreAdd;
+
+      // Remove selected crystals
+      const crystalsAfterRemove = state.crystals.filter(c => !c.selected);
 
       const newCrystals = [];
       for (let column = 0; column < state.columns; column += 1) {

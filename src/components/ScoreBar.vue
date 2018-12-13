@@ -5,7 +5,7 @@
     <div
       class="title"
     >
-      Vuewel Drop
+      Vuewel Plop
     </div>
     <div
       class="score"
