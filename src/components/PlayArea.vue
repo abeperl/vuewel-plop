@@ -4,31 +4,35 @@
     :style="{ width: `${columns * 50}px`, height: `${rows * 50}px` }"
     ref="container"
   >
-      <transition-group
-        name="fade"
-      >
-        <crystal
-          v-for="crystal in crystals"
-          :key="crystal.id"
-          :width="50"
-          :color="crystal.color"
-          :selected="crystal.selected"
-          :style="{
-            position: 'absolute',
-            top: `${crystal.row * 50}px`,
-            left: `${crystal.column * 50}px`
-          }"
-          @touchstart.native="touchStart"
-          @touchmove.native="touchMove"
-          @touchend.native="touchEnd"
-          class="crystal"
-        />
-      </transition-group>
+    <transition-group
+      name="fade"
+    >
+      <crystal
+        v-for="crystal in crystals"
+        :key="crystal.id"
+        :width="50"
+        :color="crystal.color"
+        :selected="crystal.selected"
+        :style="{
+          position: 'absolute',
+          top: `${crystal.row * 50}px`,
+          left: `${crystal.column * 50}px`
+        }"
+        :faded="tracking && !crystal.selected"
+        @touchstart.native="touchStart"
+        @touchmove.native="touchMove"
+        @touchend.native="touchEnd"
+        class="crystal"
+      />
+    </transition-group>
   </div>
 </template>
 
 <script>
 export default {
+  data: () => ({
+    tracking: false,
+  }),
   computed: {
     rows: {
       get() {
@@ -60,9 +64,11 @@ export default {
       };
     },
     touchStart(e) {
+      this.tracking = true;
       this.$store.commit('startTouch', this.find(e.touches[0]));
     },
     touchEnd() {
+      this.tracking = false;
       this.$store.commit('endTouch');
     },
     touchMove(e) {

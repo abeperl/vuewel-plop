@@ -21,7 +21,7 @@
 
     <polygon
       points="1,10 10,1 90,1 100,10 100,90 90,100 10,100 1,90 1,10"
-      :style="`stroke-width: 2px; stroke:#00000066; fill: ${color};`"
+      :style="`stroke-width: 2px; stroke:#00000066; fill: ${currentColor};`"
       :filter="selected ? 'url(#outerGlow)' : ''"
     />
     <rect
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import Color from 'color';
+
 export default {
   props: {
     size: {
@@ -51,6 +53,15 @@ export default {
     selected: {
       type: Boolean,
       default: false,
+    },
+    faded: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    currentColor() {
+      return this.faded ? Color(this.color).lighten(0.5) : this.color;
     },
   },
 };
