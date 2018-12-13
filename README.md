@@ -1,4 +1,6 @@
-# vuewel-drop
+# vuewel-plop
+
+Vuewel Plop is a Jewel grid style game that acts as a teaching tool for Vue.
 
 ## Project setup
 ```
