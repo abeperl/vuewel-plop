@@ -7,22 +7,22 @@
     <transition-group
       name="fade"
     >
-      <crystal
-        v-for="crystal in crystals"
-        :key="crystal.id"
-        :width="50"
-        :color="crystal.color"
-        :selected="crystal.selected"
+      <vuewel
+        v-for="vuewel in vuewels"
+        :key="vuewel.id"
+        :size="50"
+        :color="vuewel.color"
+        :selected="vuewel.selected"
         :style="{
           position: 'absolute',
-          top: `${crystal.row * 50}px`,
-          left: `${crystal.column * 50}px`
+          top: `${vuewel.row * 50}px`,
+          left: `${vuewel.column * 50}px`
         }"
-        :faded="tracking && !crystal.selected"
+        :faded="tracking && !vuewel.selected"
         @touchstart.native="touchStart"
         @touchmove.native="touchMove"
         @touchend.native="touchEnd"
-        class="crystal"
+        class="vuewel"
       />
     </transition-group>
   </div>
@@ -48,9 +48,9 @@ export default {
       set() {
       },
     },
-    crystals: {
+    vuewels: {
       get() {
-        return this.$store.state.crystals;
+        return this.$store.state.vuewels;
       },
       set() {
       },
@@ -88,7 +88,7 @@ export default {
   background: white;
 }
 
-.crystal {
+.vuewel {
   transition: top 0.5s, left 0s;
 }
 

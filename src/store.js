@@ -6,7 +6,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     score: 0,
-    crystals: [],
+    vuewels: [],
     rows: 10,
     columns: 7,
     colors: [
@@ -21,10 +21,10 @@ const store = new Vuex.Store({
   },
   mutations: {
     setup(state) {
-      const crystals = [];
+      const vuewels = [];
       for (let row = 0; row < state.rows; row += 1) {
         for (let column = 0; column < state.columns; column += 1) {
-          crystals.push({
+          vuewels.push({
             id: state.nextId,
             row,
             column,
@@ -34,31 +34,31 @@ const store = new Vuex.Store({
           state.nextId += 1;
         }
       }
-      state.crystals = crystals;
+      state.vuewels = vuewels;
     },
     startTouch(state, { row, column }) {
-      state.crystals.forEach(c => c.selected = false);
-      const crystal = state.crystals.find(c => c.column === column && c.row === row);
-      if (crystal) {
-        state.selectedColor = crystal.color;
-        crystal.selected = true;
+      state.vuewels.forEach(c => c.selected = false);
+      const vuewel = state.vuewels.find(c => c.column === column && c.row === row);
+      if (vuewel) {
+        state.selectedColor = vuewel.color;
+        vuewel.selected = true;
       }
     },
     extendTouch(state, { row, column }) {
-      const findCrystal = (r, c) => state.crystals.find(
-        crystal => crystal.column === c && crystal.row === r,
+      const findvuewel = (r, c) => state.vuewels.find(
+        vuewel => vuewel.column === c && vuewel.row === r,
       );
 
       const isSelected = (r, c) => {
-        const checkCrystal = findCrystal(r, c);
-        return checkCrystal && checkCrystal.selected;
+        const checkvuewel = findvuewel(r, c);
+        return checkvuewel && checkvuewel.selected;
       };
 
-      const crystal = findCrystal(row, column);
+      const vuewel = findvuewel(row, column);
 
       if (
-        crystal
-        && crystal.color === state.selectedColor
+        vuewel
+        && vuewel.color === state.selectedColor
         && (
           isSelected(row - 1, column)
           || isSelected(row + 1, column)
@@ -70,33 +70,33 @@ const store = new Vuex.Store({
           || isSelected(row + 1, column + 1)
         )
       ) {
-        crystal.selected = true;
+        vuewel.selected = true;
       }
     },
     endTouch(state) {
       // Tabulate scores
       let scoreAdd = 0;
-      state.crystals
+      state.vuewels
         .filter(c => c.selected)
         .forEach((c, i) => {
           scoreAdd += i + 1;
         });
       state.score += scoreAdd;
 
-      // Remove selected crystals
-      const crystalsAfterRemove = state.crystals.filter(c => !c.selected);
+      // Remove selected vuewels
+      const vuewelsAfterRemove = state.vuewels.filter(c => !c.selected);
 
-      const newCrystals = [];
+      const newVuewels = [];
       for (let column = 0; column < state.columns; column += 1) {
-        // Get the list of all the crystals in this column
-        const crystals = crystalsAfterRemove.filter(c => c.column === column);
+        // Get the list of all the vuewels in this column
+        const vuewels = vuewelsAfterRemove.filter(c => c.column === column);
 
         let row = 0;
 
-        // Fill in new crystals from the top
-        const fillAmount = state.rows - crystals.length;
+        // Fill in new vuewels from the top
+        const fillAmount = state.rows - vuewels.length;
         for (let fillRow = 0; fillRow < fillAmount; fillRow += 1) {
-          newCrystals.push({
+          newVuewels.push({
             id: state.nextId,
             row: fillRow,
             column,
@@ -106,18 +106,18 @@ const store = new Vuex.Store({
           state.nextId += 1;
         }
 
-        // Add in the existing crystals but make sure the rows are ok
+        // Add in the existing vuewels but make sure the rows are ok
         row = fillAmount;
-        crystals.forEach((crystal) => {
-          newCrystals.push({
-            ...crystal,
+        vuewels.forEach((vuewel) => {
+          newVuewels.push({
+            ...vuewel,
             row,
           });
           row += 1;
         });
       }
 
-      state.crystals = newCrystals;
+      state.vuewels = newVuewels;
     },
   },
   actions: {
